@@ -24,7 +24,7 @@ export default class Bootloader extends Phaser.Scene {
       "complete",
       () => {
         this.scene.start("splash");
-        //this.scene.start("game", {name: "STAGE", number: 1});  // Use for testing levels
+        //this.scene.start("transition", {name: "STAGE", number: 4});  // Use for testing levels
       },
       this
     );

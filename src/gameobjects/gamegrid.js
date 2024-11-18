@@ -1,39 +1,40 @@
 import Phaser from "phaser";
 import { sizes } from "../../src/sizes";
 import Pinga from "./pinga";
+import { pingaColours } from "../pingacolours";
 
 export default class GameGrid{
   constructor(scene){
     this.grid = new Array(sizes.rows).fill(0).map(() => new Array(sizes.columns).fill(0));
     this.scene = scene;
   }
-  createGameGrid(){
+  createGameGrid(levelNumber){
     for(let row = 0; row < sizes.rows; row++){
       for(let col = 0; col < sizes.columns; col++){
-        if (row < sizes.rows - 8){
+        if (row < sizes.rows - 9){
           let randNo;
           do{
-            randNo = Phaser.Math.Between(0,3);
+            randNo = Phaser.Math.Between(0,Phaser.Math.Clamp(levelNumber+1,3,pingaColours.length));
           } while (randNo == 0);
           this.grid[row][col] = randNo;
         }
-        else if (row < sizes.rows - 7){
-          let chance = Phaser.Math.Between(0,4);
+        else if (row < sizes.rows - 8){
+          let chance = Phaser.Math.Between(0,5);
           if (chance == 0){
             this.grid[row][col] = 0;
           }
           else
           {
-            this.grid[row][col] = Phaser.Math.Between(1,3);
+            this.grid[row][col] = Phaser.Math.Between(1,Phaser.Math.Clamp(levelNumber+1,3,pingaColours.length));
           }
         }
-        else if (row < sizes.rows - 6){
-          let chance = Phaser.Math.Between(0,3);
+        else if (row < sizes.rows - 7){
+          let chance = Phaser.Math.Between(0,4);
           if (this.grid[row-1][col] == 0 || chance == 0){
             this.grid[row][col] = 0;
           }
           else{
-            this.grid[row][col] = Phaser.Math.Between(1,3);
+            this.grid[row][col] = Phaser.Math.Between(1,Phaser.Math.Clamp(levelNumber+1,3,pingaColours.length));
           }
         }
         else{
@@ -45,7 +46,7 @@ export default class GameGrid{
   }
   
   //method that adds a row of random balls
-  addRow(){
+  addRow(levelNumber){
     //moving the rows with one row below
     for(let i=sizes.rows - 1; i>0; i--)
     {
@@ -61,7 +62,7 @@ export default class GameGrid{
       let randNo;
       do
       {
-        randNo = Phaser.Math.Between(0,3)
+        randNo = Phaser.Math.Between(0,Phaser.Math.Clamp(levelNumber+1,3,pingaColours.length))
       } while (randNo == 0);
       this.grid[0][i] = randNo;
     }

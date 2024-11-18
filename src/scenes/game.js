@@ -28,12 +28,12 @@ export default class GameScene extends Phaser.Scene{
 
   create(){
     this.cameras.main.setBackgroundColor(0x181818);
-    this.lights.enable().setAmbientColor(0x555555);
+    this.lights.enable().setAmbientColor(0x666666);
     this.cameras.main.setBounds(0, 0, 20920 * 2, 20080 * 2);
     this.physics.world.setBounds(0, 0, sizes.width, sizes.height);
 
     this.levelFinished = false;
-    this.quota = 100 + (100*this.number);
+    this.quota = 50 + (50*this.number);
 
     this.createLevel();
     this.addPlayer();
@@ -53,9 +53,9 @@ export default class GameScene extends Phaser.Scene{
     this.player.update();
     this.drawPointers(this.player.gridPos);
 
-    if(this.counterSeconds >= 8 - Phaser.Math.Clamp(this.number,0,5) && !this.levelFinished){
+    if(this.counterSeconds >= 10 - Phaser.Math.Clamp(this.number,0,5) && !this.levelFinished){
       this.counterSeconds=0;
-      this.gameGrid.addRow();
+      this.gameGrid.addRow(this.number);
       this.drawPingas();
     }
 
@@ -78,7 +78,7 @@ export default class GameScene extends Phaser.Scene{
     this.add.tileSprite(0, 0, sizes.width, sizes.height, "bg" + Phaser.Math.Between(1,8)).setOrigin(0)
       .setTint(0x666666).setTilePosition(0,10).setPipeline('Light2D');
 
-    this.gameGrid.createGameGrid();
+    this.gameGrid.createGameGrid(this.number);
     this.drawPingas();  
   }
 
