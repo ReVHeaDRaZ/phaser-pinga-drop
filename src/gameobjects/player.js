@@ -167,7 +167,7 @@ class Player extends Phaser.GameObjects.Sprite {
   }
 
   moveLeft(){
-    if(!this.moving && !this.grabbing && this.gridPos > 0){
+    if(!this.moving && !this.grabbing && this.gridPos > 0 && !this.dead){
       this.gridPos--;
       this.right = false;
       this.flipX = true;
@@ -186,7 +186,7 @@ class Player extends Phaser.GameObjects.Sprite {
     }
   }
   moveRight(){
-    if(!this.moving && !this.grabbing && this.gridPos < sizes.columns-1){
+    if(!this.moving && !this.grabbing && this.gridPos < sizes.columns-1 && !this.dead){
       this.gridPos++;
       this.right = true;
       this.flipX = false;
@@ -208,7 +208,7 @@ class Player extends Phaser.GameObjects.Sprite {
     if(!this.grabbing && !this.dead){
       this.grabbing = true;
       this.anims.play("grab", true);
-      this.scene.playAudio("getwoosh");
+      
       this.getBalls();
     }
   }
@@ -253,6 +253,7 @@ class Player extends Phaser.GameObjects.Sprite {
   getBalls(){
     let i = sizes.rows - 1;
     let exit = false;
+    let ballGrabbed = false;
     while(i >= 0 && !exit)
     {
       if(this.gameGrid.grid[i][this.gridPos] != 0)
@@ -262,6 +263,7 @@ class Player extends Phaser.GameObjects.Sprite {
           this.ballsInHandType = this.gameGrid.grid[i][this.gridPos];
           this.gameGrid.grid[i][this.gridPos] = 0;
           this.ballsInHand++;
+          ballGrabbed=true;
           
           let tempPinga = new Pinga(this.scene, this.gridPos * sizes.cellSize, i * sizes.cellSize, this.ballsInHandType-1);
           this.scene.tweens.add({
@@ -277,6 +279,7 @@ class Player extends Phaser.GameObjects.Sprite {
           {
             this.gameGrid.grid[i][this.gridPos] = 0;
             this.ballsInHand++;
+            ballGrabbed=true;
 
             let tempPinga = new Pinga(this.scene, this.gridPos * sizes.cellSize, i * sizes.cellSize, this.ballsInHandType-1);
             this.scene.tweens.add({
@@ -294,8 +297,8 @@ class Player extends Phaser.GameObjects.Sprite {
       }
       i--;
     }
+    if(ballGrabbed) this.scene.playAudio("getwoosh");
     this.scene.drawPingas();
-    console.log(this.ballsInHand + "balls, type: " + this.ballsInHandType);
   }
 
   //droping the balls from the character hands to the game board
