@@ -62,7 +62,7 @@ export default class GameScene extends Phaser.Scene{
     }
 
     // Check for game lost/won
-    if(this.checkGameLost() && !this.levelFinished){
+    if(this.checkGameLost() && !this.levelFinished && this.canAddRow){
       this.player.die();
       this.levelFinished = true;
       this.playAudio("lose");
@@ -136,7 +136,7 @@ export default class GameScene extends Phaser.Scene{
     let i = 0;
     while(!lost && i<sizes.columns) 
     {
-      if (this.gameGrid.grid[sizes.rows - 1][i] != 0) 
+      if (this.gameGrid.grid[sizes.rows - 1][i] > 0) 
       {
         lost = true;
       }
