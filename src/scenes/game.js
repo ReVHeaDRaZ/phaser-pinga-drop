@@ -14,9 +14,9 @@ export default class GameScene extends Phaser.Scene{
     this.pointers = [];
 
     this.counterSeconds = 0;
-    this.scoreText = null;
     this.levelFinished = false;
     this.quota = 100;
+    this.canAddRow = true; // Used to stop a row being added while chain reaction
   }
 
   init(data) {
@@ -50,15 +50,18 @@ export default class GameScene extends Phaser.Scene{
   }
 
   update(){
+    // Draw player and pointers
     this.player.update();
     this.drawPointers(this.player.gridPos);
 
-    if(this.counterSeconds >= 10 - Phaser.Math.Clamp(this.number,0,5) && !this.levelFinished){
+    // Adds a new row when counter seconds are greater than 10-level number(can't be less than 5 seconds)
+    if(this.counterSeconds >= 10 - Phaser.Math.Clamp(this.number,0,5) && !this.levelFinished && this.canAddRow){
       this.counterSeconds=0;
       this.gameGrid.addRow(this.number);
       this.drawPingas();
     }
 
+    // Check for game lost/won
     if(this.checkGameLost() && !this.levelFinished){
       this.player.die();
       this.levelFinished = true;
@@ -73,14 +76,22 @@ export default class GameScene extends Phaser.Scene{
     }
   }
 
+  //**********************METHODS*************************** */
   createLevel() {
     // Add a random background
     this.add.tileSprite(0, 0, sizes.width, sizes.height, "bg" + Phaser.Math.Between(1,8)).setOrigin(0)
       .setTint(0x666666).setTilePosition(0,10).setPipeline('Light2D');
 
+    // Create and draw the gamegrid
     this.gameGrid.createGameGrid(this.number);
     this.drawPingas();  
   }
+
+  // Adds the player to the game. The starting position of the player is the center/bottom of the grid.
+  addPlayer() { 
+    this.player = new Player(this, (Math.floor(sizes.columns/2) * sizes.cellSize) - 16, ((sizes.rows-1) * sizes.cellSize)-8, Math.floor(sizes.columns/2),this.gameGrid );
+  }
+
 
   // Draws the pingas on the screen using the gameGrid
   drawPingas(){
@@ -151,12 +162,6 @@ export default class GameScene extends Phaser.Scene{
     return won;
   }
 
-  /*
-    Add the player to the game. The starting position of the player is the center/bottom of the grid.
-    */
-    addPlayer() { 
-      this.player = new Player(this, (Math.floor(sizes.columns/2) * sizes.cellSize) - 16, ((sizes.rows-1) * sizes.cellSize)-8, Math.floor(sizes.columns/2),this.gameGrid );
-    }
     
   // Audio Functions
   loadAudios() {

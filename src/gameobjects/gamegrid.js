@@ -196,7 +196,7 @@ export default class GameGrid{
   }
 
   
-  //remove the balls that needs to be destroyed due to the chain reaction
+  //remove the balls that needs to be destroyed due to the chain reaction and add a tempPinga with bloom effect
   removeAllBalls(ballType)
   {
     let score = 0;
@@ -262,8 +262,28 @@ export default class GameGrid{
       this.checkBallBottom(ballY, ballX, ballType);
       this.checkBallLeft(ballY, ballX, ballType);
       this.checkBallRight(ballY, ballX, ballType);
-      this.removeAllBalls(ballType);
-      this.checkEmptySpaces();
+      // Delayed calls to add a pause inbetween chain reactions
+      this.scene.time.delayedCall(
+        150,
+        () => {
+          this.scene.canAddRow = false;
+          this.removeAllBalls(ballType);
+
+          this.scene.time.delayedCall(
+            275,
+            () => {
+              this.checkEmptySpaces();
+              this.scene.drawPingas();
+              this.scene.canAddRow = true;
+            },
+            null,this
+          );
+            
+        },
+        null,
+        this
+      );
+      
     }
 
   }
