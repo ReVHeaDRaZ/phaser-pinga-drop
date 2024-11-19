@@ -36,30 +36,22 @@ class Player extends Phaser.GameObjects.Sprite {
     this.leftButton = scene.plugins.get('rexButton')
       .add(this.scene.add.sprite(sizes.controlsOffset*0.75, sizes.height + sizes.controlsHeight - sizes.controlsOffset,"leftButton")
       .setAlpha(0.25).setScrollFactor(0).setDepth(5), {
-        // enable: true,
         mode: 0,              // 0|'press'|1|'release'
-        // clickInterval: 100    // ms
     });
     this.rightButton = scene.plugins.get('rexButton')
       .add(this.scene.add.sprite(sizes.controlsOffset*2, sizes.height + sizes.controlsHeight - sizes.controlsOffset,"rightButton")
       .setAlpha(0.25).setScrollFactor(0).setDepth(5), {
-        // enable: true,
         mode: 0,              // 0|'press'|1|'release'
-        // clickInterval: 100    // ms
     });
     this.grabButton = scene.plugins.get('rexButton')
       .add(this.scene.add.sprite(sizes.width-sizes.controlsOffset*2, sizes.height + sizes.controlsHeight - sizes.controlsOffset,"grabButton")
       .setAlpha(0.25).setScrollFactor(0).setDepth(5), {
-        // enable: true,
         mode: 0,              // 0|'press'|1|'release'
-        // clickInterval: 100    // ms
     });
     this.dropButton = scene.plugins.get('rexButton')
       .add(this.scene.add.sprite(sizes.width-sizes.controlsOffset*0.75, sizes.height + sizes.controlsHeight - sizes.controlsOffset,"dropButton")
       .setAlpha(0.25).setScrollFactor(0).setDepth(5), {
-        // enable: true,
         mode: 0,              // 0|'press'|1|'release'
-        // clickInterval: 100    // ms
     });
     this.scene.input.addPointer(1);
     
@@ -151,6 +143,7 @@ class Player extends Phaser.GameObjects.Sprite {
         pinga.setVisible(true);
     });
     
+    // Handle keyboard controls and idle animation
     if (this.dead) return;
     
     if (Phaser.Input.Keyboard.JustDown(this.A)) this.moveLeft();
@@ -222,8 +215,7 @@ class Player extends Phaser.GameObjects.Sprite {
       this.ballsStreak = this.ballsInHand >= 3;
       this.throwBalls();
       let ballX = this.gameGrid.getBallX(this.gridPos);
-      this.gameGrid.markBalls(this.gridPos,ballX,this.ballsStreak);
-      
+      this.gameGrid.markBalls(this.gridPos,ballX,this.ballsStreak); 
     }
   }
 

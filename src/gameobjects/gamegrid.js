@@ -45,7 +45,7 @@ export default class GameGrid{
     }
   }
   
-  //method that adds a row of random balls
+  //method that adds a row of random pingas
   addRow(levelNumber){
     //moving the rows with one row below
     for(let i=sizes.rows - 1; i>0; i--)
@@ -68,7 +68,7 @@ export default class GameGrid{
     }
   }
 
-  //get the first row where it is a ball and it's on the same column as the character
+  //get the first row where it is a pinga and it's on the same column as the character
   getBallX(characterX)
   {
     let i = sizes.rows;

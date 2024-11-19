@@ -95,7 +95,7 @@ export default class GameScene extends Phaser.Scene{
     }
   }
 
-  //Draws the pointers that help us to know where the pinga will fall/which pinga to take
+  //Draws the pointers that help show where the pinga will fall/which pinga to take
   drawPointers(characterX){	
     this.pointers.forEach((pointer)=>pointer.destroy());
     this.pointer = [];
@@ -158,7 +158,7 @@ export default class GameScene extends Phaser.Scene{
       this.player = new Player(this, (Math.floor(sizes.columns/2) * sizes.cellSize) - 16, ((sizes.rows-1) * sizes.cellSize)-8, Math.floor(sizes.columns/2),this.gameGrid );
     }
     
-  
+  // Audio Functions
   loadAudios() {
     this.audios = {
       getwoosh: this.sound.add("woosh"),
@@ -218,7 +218,8 @@ export default class GameScene extends Phaser.Scene{
   }
 
   /*
-    This is called when the player finishes the level. It stops the music and it starts the transition scene increasing the stage number, so we will load the next stage.
+    This is called when the player finishes the level. 
+    It stops the music and starts the transition scene increasing the stage number, so we will load the next stage.
     */
     finishScene() {
       this.time.delayedCall(
