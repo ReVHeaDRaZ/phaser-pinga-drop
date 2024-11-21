@@ -24,8 +24,8 @@ export default class Transition extends Phaser.Scene {
     //Load outro scene if out of live or finished game
     if (this.registry.get("dead") == 1)
       this.loadOutro(true);
-    else if (this.number === 10)
-      this.loadOutro();
+    // else if (this.number === 10)
+    //   this.loadOutro();
     else{
       if(this.number>0)
         this.addScore();

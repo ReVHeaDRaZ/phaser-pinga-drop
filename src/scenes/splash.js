@@ -118,6 +118,18 @@ export default class Splash extends Phaser.Scene {
     Generates the instructions text for the player.
     */
   showInstructions() {
+    const scene = this;
+    var xmlHttp = new XMLHttpRequest();
+      xmlHttp.open("GET", "http://localhost/pinga-drop-highscore.php", true);
+      xmlHttp.onreadystatechange = function() {
+        if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
+            const data = JSON.parse(xmlHttp.responseText);
+            // Display or process the high scores
+            scene.displayHighScore(data);
+        }
+      };
+    xmlHttp.send();
+    
     if(this.registry.get("desktop")){
       this.add
         .bitmapText(this.center_width, 300, "pixelFont", "A-D/Arrows: move", 20)
@@ -164,4 +176,11 @@ export default class Splash extends Phaser.Scene {
       yoyo: true,
     });
   }
+
+
+  displayHighScore(highscores) {
+    let highscore = highscores[0];
+    this.add.bitmapText(this.center_width, 240, "pixelFont", "-HIGHSCORE-\n" + highscore.name + ": " + highscore.score, 15,1).setOrigin(0.5);
+  }
+  
 }
