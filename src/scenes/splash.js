@@ -120,7 +120,8 @@ export default class Splash extends Phaser.Scene {
   showInstructions() {
     const scene = this;
     var xmlHttp = new XMLHttpRequest();
-      xmlHttp.open("GET", "http://localhost/pinga-drop-highscore.php", true);
+      //xmlHttp.open("GET", "http://localhost/pinga-drop-highscore.php", true); // For testing
+      xmlHttp.open("GET", "https://razstuff.com/pinga-drop/pinga-drop-highscore.php", true);
       xmlHttp.onreadystatechange = function() {
         if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
             const data = JSON.parse(xmlHttp.responseText);

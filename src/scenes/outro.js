@@ -43,7 +43,8 @@ export default class Outro extends Phaser.Scene {
       
         if(playerName!=null){
           var xmlHttp = new XMLHttpRequest();
-          xmlHttp.open("POST", "http://localhost/pinga-drop-highscore.php", true);
+          //xmlHttp.open("POST", "http://localhost/pinga-drop-highscore.php", true); // For testing
+          xmlHttp.open("POST", "https://razstuff.com/pinga-drop/pinga-drop-highscore.php", true);
           xmlHttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
           
           const data = {
@@ -136,7 +137,8 @@ export default class Outro extends Phaser.Scene {
   isTopTenScore(playerScore){
     return new Promise((resolve, reject) => {
       const xmlHttp = new XMLHttpRequest();
-      xmlHttp.open("GET", "http://localhost/pinga-drop-highscore.php", true);
+      //xmlHttp.open("GET", "http://localhost/pinga-drop-highscore.php", true); // For testing
+      xmlHttp.open("GET", "https://razstuff.com/pinga-drop/pinga-drop-highscore.php", true);
       xmlHttp.onreadystatechange = function() {
         if (xmlHttp.readyState === 4){
           if(xmlHttp.status === 200) {
@@ -156,7 +158,8 @@ export default class Outro extends Phaser.Scene {
   showHighScores(){
     const scene = this;
     var xmlHttp = new XMLHttpRequest();
-      xmlHttp.open("GET", "http://localhost/pinga-drop-highscore.php", true);
+      //xmlHttp.open("GET", "http://localhost/pinga-drop-highscore.php", true); // For testing
+      xmlHttp.open("GET", "https://razstuff.com/pinga-drop/pinga-drop-highscore.php", true);
       xmlHttp.onreadystatechange = function() {
         if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
             const data = JSON.parse(xmlHttp.responseText);
