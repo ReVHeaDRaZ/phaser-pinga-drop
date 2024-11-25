@@ -64,7 +64,7 @@ class Player extends Phaser.GameObjects.Sprite {
     this.right = true;
     this.moving = false;
     this.grabbing = false;
-    this.dead = false;
+    this.canMove = true;
 
     this.init();
   }
@@ -144,7 +144,7 @@ class Player extends Phaser.GameObjects.Sprite {
     });
     
     // Handle keyboard controls and idle animation
-    if (this.dead) return;
+    if (!this.canMove) return;
     
     if (Phaser.Input.Keyboard.JustDown(this.A)) this.moveLeft();
     if (Phaser.Input.Keyboard.JustDown(this.cursor.left)) this.moveLeft();
@@ -160,7 +160,7 @@ class Player extends Phaser.GameObjects.Sprite {
   }
 
   moveLeft(){
-    if(!this.moving && !this.grabbing && this.gridPos > 0 && !this.dead){
+    if(!this.moving && !this.grabbing && this.gridPos > 0 && this.canMove){
       this.gridPos--;
       this.right = false;
       this.flipX = true;
@@ -179,7 +179,7 @@ class Player extends Phaser.GameObjects.Sprite {
     }
   }
   moveRight(){
-    if(!this.moving && !this.grabbing && this.gridPos < sizes.columns-1 && !this.dead){
+    if(!this.moving && !this.grabbing && this.gridPos < sizes.columns-1 && this.canMove){
       this.gridPos++;
       this.right = true;
       this.flipX = false;
@@ -198,7 +198,7 @@ class Player extends Phaser.GameObjects.Sprite {
   }
 
   grab() {
-    if(!this.grabbing && !this.dead){
+    if(!this.grabbing && this.canMove){
       this.grabbing = true;
       this.anims.play("grab", true);
       
@@ -207,7 +207,7 @@ class Player extends Phaser.GameObjects.Sprite {
   }
 
   drop() {
-    if(!this.grabbing && !this.dead && this.ballsInHand>0){
+    if(!this.grabbing && this.canMove && this.ballsInHand>0){
       this.grabbing = true;
       this.anims.play("drop", true);
       this.scene.playAudio("dropwoosh");
@@ -237,7 +237,7 @@ class Player extends Phaser.GameObjects.Sprite {
 
   
   die() {
-    this.dead = true;
+    this.canMove = false;
     this.anims.play("die", true);
   }
 

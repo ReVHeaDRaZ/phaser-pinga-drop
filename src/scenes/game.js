@@ -82,6 +82,7 @@ export default class GameScene extends Phaser.Scene{
 
     if(this.checkGameWon() && !this.levelFinished && this.player.ballsInHand==0){
       this.levelFinished = true;
+      this.player.canMove = false;
       this.player.anims.play("win");
       this.playAudio("win");
       this.finishScene();
