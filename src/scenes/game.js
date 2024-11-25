@@ -14,6 +14,8 @@ export default class GameScene extends Phaser.Scene{
     this.pointers = [];
 
     this.counterSeconds = 0;
+    this.comboSeconds = 0;
+    this.combo = 1;
     this.levelFinished = false;
     this.quota = 100;
     this.canAddRow = true; // Used to stop a row being added while chain reaction
@@ -46,7 +48,17 @@ export default class GameScene extends Phaser.Scene{
       delay: 1000,
       loop: true,
       callback: () => this.counterSeconds++
-    })
+    });
+
+    this.comboTimer = this.time.addEvent({
+      delay: 1000,
+      loop: true,
+      callback: () => {
+        this.comboSeconds--;
+        if(this.comboSeconds < 0)
+          this.comboSeconds = 0;
+      }
+    });
   }
 
   update(){
@@ -262,7 +274,8 @@ export default class GameScene extends Phaser.Scene{
     }
   
     /*
-      These are called when the player scores. It updates the quota and score from the registry and it adds a little tween effect to the score text.
+      These are called when the player scores. It updates the quota, score from the registry, and combo.
+      It also adds a little tween effect to the HUD text.
       */
     updateScore(amount) {
       let newScore = +this.registry.get("score") + amount;
@@ -289,6 +302,38 @@ export default class GameScene extends Phaser.Scene{
         duration: 50,
         repeat: 1,
       });
+    }
+
+    updateCombo(scorePosition){
+      if(this.comboSeconds > 0){
+        this.comboTimer.reset({
+          delay: 1000,
+          loop: true,
+          callback: () => {
+            this.comboSeconds--;
+            if(this.comboSeconds < 0)
+              this.comboSeconds = 0;
+          }
+        });
+
+        this.combo++;
+        this.comboSeconds = 2;
+        let comboText = this.add.bitmapText(
+          scorePosition.x, scorePosition.y, "pixelFont", "X" + this.combo.toString(), 5).setOrigin(0).setDepth(100);
+        this.tweens.add({
+          targets: [comboText],
+          duration: 800,
+          x: sizes.width * 0.75,
+          y: sizes.height * 0.2,
+          scale: 8,
+          alpha: 0,
+          onComplete: () => comboText.destroy()
+        });
+      }else{
+        this.combo = 1;
+        this.comboSeconds = 2;
+      }
+
     }
 
 }

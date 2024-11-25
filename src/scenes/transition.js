@@ -96,7 +96,7 @@ export default class Transition extends Phaser.Scene {
   addScore() {
     this.scoreCoins = this.add
       .bitmapText(
-        this.center_width + 32,
+        this.center_width,
         this.center_height - 75,
         "pixelFont",
         "Score:" + this.registry.get("score"),

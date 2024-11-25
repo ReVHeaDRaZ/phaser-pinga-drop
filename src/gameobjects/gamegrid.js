@@ -200,6 +200,7 @@ export default class GameGrid{
   removeAllBalls(ballType)
   {
     let score = 0;
+    let scorePosition = {x:0, y:0};
 
     for(let i = 0; i<sizes.rows; i++) 
     {
@@ -211,6 +212,8 @@ export default class GameGrid{
           score++;
           let tempPinga = new Pinga(this.scene, j * sizes.cellSize, i * sizes.cellSize, ballType-1);
           tempPinga.postFX.addBloom(0xffffff,1,1,1,3);
+          scorePosition.x = tempPinga.x;
+          scorePosition.y = tempPinga.y;
           this.scene.tweens.add({
             targets: tempPinga,
             opacity: 0,
@@ -221,7 +224,8 @@ export default class GameGrid{
         }
       }
     }
-    this.scene.updateScore(score*10);
+    this.scene.updateCombo(scorePosition);
+    this.scene.updateScore(score*10*this.scene.combo);
     this.scene.updateQuota(score);
     this.scene.playAudio("pop");
   }
