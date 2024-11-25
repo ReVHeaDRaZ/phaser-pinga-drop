@@ -74,17 +74,28 @@ export default class GameScene extends Phaser.Scene{
     }
 
     // Check for game lost/won
-    if(this.checkGameLost() && !this.levelFinished && this.canAddRow){
+    if(!this.levelFinished && this.canAddRow && this.checkGameLost()){
       this.player.die();
       this.levelFinished = true;
       this.playAudio("lose");
     }
 
-    if(this.checkGameWon() && !this.levelFinished && this.player.ballsInHand==0){
+    if(!this.levelFinished && this.player.ballsInHand==0 && this.checkGameWon()){
       this.levelFinished = true;
       this.player.canMove = false;
       this.player.anims.play("win");
       this.playAudio("win");
+      
+      let stageCompletedText = this.add.bitmapText(
+        sizes.width/2, sizes.height/2, "pixelFont", "STAGE COMPLETE", 5).setOrigin(0.5).setDepth(100).setAlpha(0);
+      this.tweens.add({
+        targets: [stageCompletedText],
+        duration: 500,
+        scale: 5,
+        alpha: 1,
+        ease: 'Back.easeInOut'
+      });
+      
       this.finishScene();
     }
   }
@@ -168,6 +179,19 @@ export default class GameScene extends Phaser.Scene{
           won = false;
         }
       }
+    }
+    if(won==true){ // If board cleared give bonus(Initial Quota * 10)
+      let bonusAmount = (50 + (50*this.number)) * 10; 
+      this.updateScore(bonusAmount);
+      let bonusText = this.add.bitmapText(
+        sizes.width/2, (sizes.height/2)-100, "pixelFont", "BONUS-" + bonusAmount, 5).setOrigin(0.5).setDepth(100).setAlpha(0);
+      this.tweens.add({
+        targets: [bonusText],
+        duration: 500,
+        scale: 5,
+        alpha: 1,
+        ease: 'Back.easeInOut'
+      });
     }
     if(this.quota <= 0)
       won = true;
@@ -328,6 +352,7 @@ export default class GameScene extends Phaser.Scene{
           y: sizes.height * 0.2,
           scale: 8,
           alpha: 0,
+          ease: 'Quad.easeIn',
           onComplete: () => comboText.destroy()
         });
       }else{
