@@ -348,8 +348,6 @@ export default class GameScene extends Phaser.Scene{
         this.tweens.add({
           targets: [comboText],
           duration: 800,
-          x: sizes.width * 0.75,
-          y: sizes.height * 0.2,
           scale: 8,
           alpha: 0,
           ease: 'Quad.easeIn',

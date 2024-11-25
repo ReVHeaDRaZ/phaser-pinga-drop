@@ -27,8 +27,10 @@ export default class Transition extends Phaser.Scene {
     // else if (this.number === 10)
     //   this.loadOutro();
     else{
-      if(this.number>0)
+      if(this.number > 0)
         this.addScore();
+      else
+        this.addHowToPlay();
 
       this.add
         .bitmapText(
@@ -60,12 +62,37 @@ export default class Transition extends Phaser.Scene {
           20
         )
         .setOrigin(0.5);
+      if(this.registry.get("desktop")){
+        this.space = this.add.bitmapText(
+          this.center_width,
+          550,
+          "pixelFont",
+          "Press SPACE to continue",
+          20
+        ).setOrigin(0.5);
+      }else{
+        this.space = this.add.bitmapText(
+          this.center_width,
+          550,
+          "pixelFont",
+          "Touch to continue",
+          20
+        ).setOrigin(0.5);
+    }
+
+    this.tweens.add({
+      targets: this.space,
+      duration: 300,
+      alpha: { from: 0, to: 1 },
+      repeat: -1,
+      yoyo: true,
+    });
       
       this.input.keyboard.on("keydown-ENTER", () => this.loadNext(), this);
       this.input.keyboard.on("keydown-SPACE", () => this.loadNext(), this);
       this.input.on('pointerdown', () => this.loadNext(), this);
       this.time.delayedCall(
-        4000,
+        15000,
         () => {
           this.loadNext();
         },
@@ -91,7 +118,7 @@ export default class Transition extends Phaser.Scene {
   }
 
   /*
-    Helper function to show the score and hearts
+    Helper function to show the score and how to play
     */
   addScore() {
     this.scoreCoins = this.add
@@ -105,6 +132,18 @@ export default class Transition extends Phaser.Scene {
       .setDropShadow(0, 4, 0x222222, 0.9)
       .setOrigin(0.5)
       .setScrollFactor(0);
+  }
+  addHowToPlay() {
+    this.add.bitmapText(
+      this.center_width,
+      this.height - 160,
+      "pixelFont",
+      "-HOW TO PLAY-\n\nClear pingas from the screen by grabbing\nmatching colours and dropping them\nto create a chain of 3 or more\n"
+      + "\nClearing extra pingas within 2 seconds\nbuilds your combo multiplier\nfor extra points\n"
+      + "\nClear the quota amount of pingas\nto finish the stage or clear\nthe entire screen of pingas for a bonus",
+      12,1
+    )
+    .setOrigin(0.5)
   }
 
   playMusic(theme = "transition") {
