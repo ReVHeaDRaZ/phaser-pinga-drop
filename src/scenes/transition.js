@@ -1,3 +1,4 @@
+import Pinga from "../gameobjects/pinga";
 import { sizes } from "../sizes";
 export default class Transition extends Phaser.Scene {
   constructor() {
@@ -27,8 +28,12 @@ export default class Transition extends Phaser.Scene {
     // else if (this.number === 10)
     //   this.loadOutro();
     else{
-      if(this.number > 0)
+      if(this.number > 0){
+        if(this.number==3)
+          this.addHowToSuperPinga();
+
         this.addScore();
+      }
       else
         this.addHowToPlay();
 
@@ -91,8 +96,10 @@ export default class Transition extends Phaser.Scene {
       this.input.keyboard.on("keydown-ENTER", () => this.loadNext(), this);
       this.input.keyboard.on("keydown-SPACE", () => this.loadNext(), this);
       this.input.on('pointerdown', () => this.loadNext(), this);
+      
+      //Automatically start next stage in 30 seconds
       this.time.delayedCall(
-        15000,
+        30000,
         () => {
           this.loadNext();
         },
@@ -144,6 +151,25 @@ export default class Transition extends Phaser.Scene {
       12,1
     )
     .setOrigin(0.5)
+  }
+
+  addHowToSuperPinga() {
+    this.add.bitmapText(
+      this.center_width,
+      this.height - 160,
+      "pixelFont",
+      "-SUPER PINGAS-\n\nSuper pingas act like normal pingas\nuntil you pick one up, which gives"
+      + "\nyou super pinga power and enables you to\nclear all of a colour on the screen\nwhen you drop it."
+      + "\n\nBut make sure when you drop it that you\nmake a chain of at least 3, otherwise\nit will turn back into a normal pinga"
+      + "\nand is lost forever.",
+      12,1
+    ).setOrigin(0.5);
+    this.superPingas = [
+      new Pinga(this, this.center_width-180, this.center_height+50, 0, "superpinga"),
+      new Pinga(this, this.center_width-130, this.center_height+50, 1, "superpinga"),
+      new Pinga(this, this.center_width+100, this.center_height+50, 2, "superpinga"),
+      new Pinga(this, this.center_width+150, this.center_height+50, 3, "superpinga")
+    ];
   }
 
   playMusic(theme = "transition") {

@@ -16,6 +16,7 @@ class Player extends Phaser.GameObjects.Sprite {
     this.ballsInHand = 0;
     this.ballsInHandType = 0;
     this.ballsStreak = 0;
+    this.superPinga = false;
     this.pingaSprites = [new Pinga(this.scene, this.x, this.y, 0).setScale(0.5).setDepth(11).setVisible(false), 
       new Pinga(this.scene, this.x, this.y, 0).setScale(0.5).setDepth(13).setVisible(false),
       new Pinga(this.scene, this.x, this.y, 0).setScale(0.5).setDepth(12).setVisible(false)
@@ -116,6 +117,10 @@ class Player extends Phaser.GameObjects.Sprite {
 
     // Add a light to follow player on update
     this.light = this.scene.lights.addLight(this.x, this.y, 350,0xffffff,0.35).setOrigin(0);
+
+    // Super pinga glow effect
+    this.superPingaGlow = this.postFX.addGlow(0xffffff,2,0,false,0.1,20);
+    this.superPingaGlow.outerStrength = 0;
   }
 
   update() {
@@ -142,7 +147,11 @@ class Player extends Phaser.GameObjects.Sprite {
       else if(this.ballsInHand > 2 && i==2)
         pinga.setVisible(true);
     });
-    
+
+    // Update the super pinga glow effect
+    this.superPingaGlow.outerStrength = this.superPinga*3;
+    this.superPingaGlow.color = pingaColours[this.ballsInHandType-1];
+
     // Handle keyboard controls and idle animation
     if (!this.canMove) return;
     
@@ -215,7 +224,12 @@ class Player extends Phaser.GameObjects.Sprite {
       this.ballsStreak = this.ballsInHand >= 3;
       this.throwBalls();
       let ballX = this.gameGrid.getBallX(this.gridPos);
-      this.gameGrid.markBalls(this.gridPos,ballX,this.ballsStreak); 
+      if(this.superPinga){
+        this.superPinga=false;
+        this.gameGrid.markAllBallsOfColour(this.gridPos,ballX,this.ballsStreak);
+      }
+      else
+        this.gameGrid.markBalls(this.gridPos,ballX,this.ballsStreak); 
     }
   }
 
@@ -257,7 +271,15 @@ class Player extends Phaser.GameObjects.Sprite {
           this.ballsInHand++;
           ballGrabbed=true;
           
-          let tempPinga = new Pinga(this.scene, this.gridPos * sizes.cellSize, i * sizes.cellSize, this.ballsInHandType-1);
+          // If it's a superpinga
+          let tempPingaType = "pinga";
+          if(this.ballsInHandType > 10){
+            this.ballsInHandType = this.ballsInHandType - 10;
+            tempPingaType = "superpinga";
+            this.superPinga = true;
+          }
+
+          let tempPinga = new Pinga(this.scene, this.gridPos * sizes.cellSize, i * sizes.cellSize, this.ballsInHandType-1, tempPingaType);
           this.scene.tweens.add({
             targets: tempPinga,
             y: sizes.height,
@@ -267,8 +289,12 @@ class Player extends Phaser.GameObjects.Sprite {
         }
         else
         {
-          if(this.gameGrid.grid[i][this.gridPos] == this.ballsInHandType)
+          if(this.gameGrid.grid[i][this.gridPos] == this.ballsInHandType || this.gameGrid.grid[i][this.gridPos] == this.ballsInHandType+10)
           {
+            // If it's a superpinga
+            if(this.gameGrid.grid[i][this.gridPos] > 10)
+              this.superPinga = true;
+            
             this.gameGrid.grid[i][this.gridPos] = 0;
             this.ballsInHand++;
             ballGrabbed=true;

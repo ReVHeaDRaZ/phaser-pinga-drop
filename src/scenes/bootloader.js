@@ -93,6 +93,11 @@ export default class Bootloader extends Phaser.Scene {
       frameHeight: 32,
     });
 
+    this.load.spritesheet("superpinga", "assets/images/super_pinga.png", {
+      frameWidth: 32,
+      frameHeight: 32,
+    });
+
     if (this.sys.game.device.os.desktop)
       this.registry.set("desktop", 1);
     else

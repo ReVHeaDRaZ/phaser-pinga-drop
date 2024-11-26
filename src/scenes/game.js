@@ -124,7 +124,10 @@ export default class GameScene extends Phaser.Scene{
     for(let row = 0; row < sizes.rows; row++){
       for(let col = 0; col < sizes.columns; col++){
         if(this.gameGrid.grid[row][col] != 0){
-          this.pingas.push(new Pinga(this, col * sizes.cellSize, row * sizes.cellSize, this.gameGrid.grid[row][col]-1));
+          if(this.gameGrid.grid[row][col] > 10)
+            this.pingas.push(new Pinga(this, col * sizes.cellSize, row * sizes.cellSize, this.gameGrid.grid[row][col]-11,"superpinga"));
+          else
+            this.pingas.push(new Pinga(this, col * sizes.cellSize, row * sizes.cellSize, this.gameGrid.grid[row][col]-1));
         }
       }
     }
