@@ -262,7 +262,7 @@ class Player extends Phaser.GameObjects.Sprite {
     let ballGrabbed = false;
     while(i >= 0 && !exit)
     {
-      if(this.gameGrid.grid[i][this.gridPos] != 0)
+      if(this.gameGrid.grid[i][this.gridPos] > 0)
       {
         if (this.ballsInHandType == 0)
         {

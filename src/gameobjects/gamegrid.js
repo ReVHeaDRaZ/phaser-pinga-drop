@@ -82,7 +82,7 @@ export default class GameGrid{
     let found = false;
     while(i>=1 && !found)
     {
-      if(this.grid[i - 1][characterX] != 0)
+      if(this.grid[i - 1][characterX] > 0)
       {
         found = true;
       }

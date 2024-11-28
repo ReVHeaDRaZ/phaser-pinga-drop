@@ -38,6 +38,12 @@ const config = {
     },
     ]
   },
+  fps: {
+    target: 60,
+    max: 60,
+    min: 30,
+    forceSetTimeOut: true
+  },
   scene: [Bootloader, Splash, Transition, GameScene, Outro]
 }
 
