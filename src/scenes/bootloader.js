@@ -98,6 +98,16 @@ export default class Bootloader extends Phaser.Scene {
       frameHeight: 32,
     });
 
+    this.load.spritesheet("cookie", "assets/images/cookie_sheet.png", {
+      frameWidth: 32,
+      frameHeight: 32,
+    });
+
+    this.load.spritesheet("water", "assets/images/water_sheet.png", {
+      frameWidth: 32,
+      frameHeight: 32,
+    });
+
     if (this.sys.game.device.os.desktop)
       this.registry.set("desktop", 1);
     else

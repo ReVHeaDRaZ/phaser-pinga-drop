@@ -1,11 +1,11 @@
 import { pingaColours } from "../pingacolours";
 
 class Pinga extends Phaser.GameObjects.Sprite {
-  constructor(scene, x, y, colour, name = "pinga") {
+  constructor(scene, x, y, type, name = "pinga") {
     super(scene, x, y, name);
     this.x = x;
     this.y = y;
-    this.colour = colour;
+    this.type = type;
     this.name = name;
     this.setScale(1);
     this.setOrigin(0);
@@ -32,7 +32,8 @@ class Pinga extends Phaser.GameObjects.Sprite {
     }
 
     this.anims.play(this.name, true);
-    this.setTint(pingaColours[this.colour]);
+    if(this.type < 20) // If not a pickup apply tint colour
+      this.setTint(pingaColours[this.type]);
   }
 
 }

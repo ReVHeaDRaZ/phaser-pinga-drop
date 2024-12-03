@@ -29,6 +29,9 @@ export default class Transition extends Phaser.Scene {
     //   this.loadOutro();
     else{
       if(this.number > 0){
+        if(this.number==1)
+          this.addHowToPickups();
+
         if(this.number==3)
           this.addHowToSuperPinga();
 
@@ -171,6 +174,29 @@ export default class Transition extends Phaser.Scene {
       new Pinga(this, this.center_width+150, this.center_height+50, 3, "superpinga")
     ];
   }
+
+  addHowToPickups() {
+    this.add.bitmapText(
+      this.center_width,
+      this.height - 220,
+      "pixelFont",
+      "-PICKUPS-\n\nGrab pickups to give an advantage.",
+      12,1
+    ).setOrigin(0.5);
+    this.add.bitmapText(
+      this.center_width,
+      this.height - 160,
+      "pixelFont",
+      "\n\n\nCOOKIES: \nAdds 2 seconds to time\nbetween rows being added."
+      + "\n\n\nVITAMIN WATER: \nDoubles the score\nof pingas removed.",
+      12,0
+    ).setOrigin(0.5);
+    this.pickups = [
+      new Pinga(this, 25, this.center_height+110, 21, "cookie"),
+      new Pinga(this, 25, this.center_height+170, 22, "water")
+    ];
+  }
+
 
   playMusic(theme = "transition") {
     this.theme = this.sound.add(theme);

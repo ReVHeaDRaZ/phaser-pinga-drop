@@ -19,6 +19,8 @@ export default class GameScene extends Phaser.Scene{
     this.levelFinished = false;
     this.quota = 100;
     this.canAddRow = true; // Used to stop a row being added while chain reaction
+    this.extraRowTime = 0; // Used to add time to row being added with cookie pickup
+    this.extraScoreMultiplier = 1; // // Used to double points with water pickup
   }
 
   init(data) {
@@ -34,8 +36,15 @@ export default class GameScene extends Phaser.Scene{
     this.cameras.main.setBounds(0, 0, 20920 * 2, 20080 * 2);
     this.physics.world.setBounds(0, 0, sizes.width, sizes.height);
 
+    // Reset game variables
+    this.counterSeconds = 0;
+    this.comboSeconds = 0;
+    this.combo = 1;
     this.levelFinished = false;
     this.quota = 50 + (50*this.number);
+    this.canAddRow = true; // Used to stop a row being added while chain reaction
+    this.extraRowTime = 0; // Used to add time to row being added with cookie pickup
+    this.extraScoreMultiplier = 1; // Used to double points with water pickup
 
     this.createLevel();
     this.addPlayer();
@@ -66,8 +75,8 @@ export default class GameScene extends Phaser.Scene{
     this.player.update();
     this.drawPointers(this.player.gridPos);
 
-    // Adds a new row when counter seconds are greater than 10-level number(can't be less than 5 seconds)
-    if(this.counterSeconds >= 10 - Phaser.Math.Clamp(this.number,0,5) && !this.levelFinished && this.canAddRow){
+    // Adds a new row when counter seconds are greater than 10 - level number + extraRowTime (can't be less than 5 seconds)
+    if(this.counterSeconds >= 10 - Phaser.Math.Clamp(this.number,0,5) + this.extraRowTime && !this.levelFinished && this.canAddRow){
       this.counterSeconds=0;
       this.gameGrid.addRow(this.number);
       this.drawPingas();
@@ -117,14 +126,27 @@ export default class GameScene extends Phaser.Scene{
   }
 
 
-  // Draws the pingas on the screen using the gameGrid
+  // Draws the pingas and pickups on the screen using the gameGrid
   drawPingas(){
     this.pingas.forEach((pinga)=>pinga.destroy());
     this.pingas = [];
     for(let row = 0; row < sizes.rows; row++){
       for(let col = 0; col < sizes.columns; col++){
         if(this.gameGrid.grid[row][col] != 0){
-          if(this.gameGrid.grid[row][col] > 10)
+          
+          if(this.gameGrid.grid[row][col] > 20){ // Pickups
+            switch(this.gameGrid.grid[row][col]){
+              case 21:
+                this.pingas.push(new Pinga(this, col * sizes.cellSize, row * sizes.cellSize, this.gameGrid.grid[row][col], "cookie"));
+                break;
+              case 22:
+                this.pingas.push(new Pinga(this, col * sizes.cellSize, row * sizes.cellSize, this.gameGrid.grid[row][col], "water"));
+                break;
+              default:
+                break;
+            }
+          }
+          else if(this.gameGrid.grid[row][col] > 10) // SuperPingas
             this.pingas.push(new Pinga(this, col * sizes.cellSize, row * sizes.cellSize, this.gameGrid.grid[row][col]-11,"superpinga"));
           else
             this.pingas.push(new Pinga(this, col * sizes.cellSize, row * sizes.cellSize, this.gameGrid.grid[row][col]-1));
@@ -259,6 +281,27 @@ export default class GameScene extends Phaser.Scene{
       .setOrigin(0)
       .setScrollFactor(0);
     this.quotaText.postFX.addBloom(this.colour,1,1,1,2,4);
+
+    this.pickupText = this.add
+      .bitmapText(sizes.width - 140, 295, "pixelFont", "-Pickups-", 15,1)
+      .setDropShadow(0, 4, 0x222222, 0.9)
+      .setOrigin(0)
+      .setScrollFactor(0);
+    this.pickupText.postFX.addBloom(this.colour,1,1,1,2,4);
+
+    this.pickupCookie = this.add
+      .sprite(sizes.width - 100, 345, "cookie")
+      .setOrigin(0.5)
+      .setScrollFactor(0)
+      .setVisible(0);
+    this.pickupCookie.postFX.addBloom(this.colour,1,1,1,1,4);
+
+    this.pickupWater = this.add
+      .sprite(sizes.width - 45, 345, "water")
+      .setOrigin(0.5)
+      .setScrollFactor(0)
+      .setVisible(0);
+    this.pickupWater.postFX.addBloom(this.colour,1,1,1,1,4);
     
   }
 

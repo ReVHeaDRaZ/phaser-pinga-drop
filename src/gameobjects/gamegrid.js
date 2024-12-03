@@ -67,10 +67,12 @@ export default class GameGrid{
         randNo = Phaser.Math.Between(0,Phaser.Math.Clamp(levelNumber+1,3,pingaColours.length));
       } while (randNo == 0);
       
-      //Chance to add a super pinga (1 in 20 - 5% chance)
+      //Chance to add a super pinga or pickup (1 in 20 - 5% chance)
       let chance = Phaser.Math.Between(0,21);
-      if (chance == 10 && levelNumber > 2)
+      if (chance == 10 && levelNumber > 2) // SuperPinga
         this.grid[0][i] = randNo+10;
+      else if (chance == 5 && levelNumber > 0) // Pickup
+        this.grid[0][i] = Phaser.Math.Between(1,2) + 20;
       else
         this.grid[0][i] = randNo;
     }
@@ -221,7 +223,7 @@ export default class GameGrid{
       }
     }
     this.scene.updateCombo(scorePosition);
-    this.scene.updateScore(score*10*this.scene.combo);
+    this.scene.updateScore(score * 10 * this.scene.combo * this.scene.extraScoreMultiplier);
     this.scene.updateQuota(score);
     this.scene.playAudio("pop");
   }

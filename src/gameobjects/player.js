@@ -2,6 +2,7 @@ import Phaser from 'phaser'
 import { sizes } from '../sizes';
 import Pinga from './pinga';
 import { pingaColours } from '../pingacolours';
+import { PickupDebris } from './particle';
 
 class Player extends Phaser.GameObjects.Sprite {
   constructor(scene, x, y, gridPos, gameGrid) {
@@ -262,18 +263,53 @@ class Player extends Phaser.GameObjects.Sprite {
     let ballGrabbed = false;
     while(i >= 0 && !exit)
     {
-      if(this.gameGrid.grid[i][this.gridPos] > 0)
-      {
-        if (this.ballsInHandType == 0)
-        {
+      if(this.gameGrid.grid[i][this.gridPos] > 0){
+        if (this.ballsInHandType == 0){
           this.ballsInHandType = this.gameGrid.grid[i][this.gridPos];
           this.gameGrid.grid[i][this.gridPos] = 0;
           this.ballsInHand++;
-          ballGrabbed=true;
+          ballGrabbed = true;
           
-          // If it's a superpinga
           let tempPingaType = "pinga";
-          if(this.ballsInHandType > 10){
+          
+          if(this.ballsInHandType > 20){ // If it's a pickup
+            switch(this.ballsInHandType){
+              case 21:
+                tempPingaType = "cookie";
+                this.scene.extraRowTime = 2;
+                Array(Phaser.Math.Between(8, 12))
+                  .fill(0)
+                  .forEach((i) => new PickupDebris(this.scene, this.x, this.y));
+                
+                this.scene.tweens.add({
+                  targets: [this.scene.pickupCookie],
+                  scale: {from:0, to:1},
+                  duration: 400
+                })
+                this.scene.pickupCookie.setVisible(1);
+                break;
+
+              case 22:
+                tempPingaType = "water";
+                this.scene.extraScoreMultiplier = 2;
+                Array(Phaser.Math.Between(8, 12))
+                  .fill(0)
+                  .forEach((i) => new PickupDebris(this.scene, this.x, this.y, 0x1111ff));
+                this.scene.tweens.add({
+                  targets: [this.scene.pickupWater],
+                  scale: {from:0, to:1},
+                  duration: 400
+                })
+                this.scene.pickupWater.setVisible(1);
+                break;
+              default:
+                break;
+            }
+            this.ballsInHandType = 0;
+            this.ballsInHand = 0;
+            exit = true;
+          }
+          else if(this.ballsInHandType > 10){ // If it's a superpinga
             this.ballsInHandType = this.ballsInHandType - 10;
             tempPingaType = "superpinga";
             this.superPinga = true;
