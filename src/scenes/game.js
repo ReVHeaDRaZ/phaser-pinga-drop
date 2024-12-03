@@ -12,15 +12,6 @@ export default class GameScene extends Phaser.Scene{
     this.gameGrid = new GameGrid(this);
     this.pingas = [];
     this.pointers = [];
-
-    this.counterSeconds = 0;
-    this.comboSeconds = 0;
-    this.combo = 1;
-    this.levelFinished = false;
-    this.quota = 100;
-    this.canAddRow = true; // Used to stop a row being added while chain reaction
-    this.extraRowTime = 0; // Used to add time to row being added with cookie pickup
-    this.extraScoreMultiplier = 1; // // Used to double points with water pickup
   }
 
   init(data) {
@@ -53,6 +44,7 @@ export default class GameScene extends Phaser.Scene{
     this.playMusic();
     this.addHUD();
 
+    // Timers
     this.time.addEvent({
       delay: 1000,
       loop: true,

@@ -180,14 +180,14 @@ export default class Transition extends Phaser.Scene {
       this.center_width,
       this.height - 220,
       "pixelFont",
-      "-PICKUPS-\n\nGrab pickups for an advantage.",
+      "-PICKUPS-\n\nGrab pickups for an advantage.\nPickups last for 10 seconds.",
       12,1
     ).setOrigin(0.5);
     this.add.bitmapText(
       this.center_width,
       this.height - 160,
       "pixelFont",
-      "\n\n\nCOOKIES: \nAdds 2 seconds to time\nbetween rows being added."
+      "\n\n\nCOOKIES: \nAdds 1 second to time\nbetween rows being added."
       + "\n\n\nVITAMIN WATER: \nDoubles the score\nof pingas removed.",
       12,0
     ).setOrigin(0.5);

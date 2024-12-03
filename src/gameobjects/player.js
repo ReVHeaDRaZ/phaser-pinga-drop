@@ -276,7 +276,7 @@ class Player extends Phaser.GameObjects.Sprite {
             switch(this.ballsInHandType){
               case 21:
                 tempPingaType = "cookie";
-                this.scene.extraRowTime = 2;
+                this.scene.extraRowTime = 1;
                 Array(Phaser.Math.Between(8, 12))
                   .fill(0)
                   .forEach((i) => new PickupDebris(this.scene, this.x, this.y));
@@ -288,6 +288,11 @@ class Player extends Phaser.GameObjects.Sprite {
                 })
                 this.scene.pickupCookie.setVisible(1);
                 this.scene.playAudio("munch");
+
+                this.scene.time.delayedCall(10000,()=>{
+                  this.scene.extraRowTime = 0;
+                  this.scene.pickupCookie.setVisible(0);
+                },null,this);
                 break;
 
               case 22:
@@ -303,6 +308,11 @@ class Player extends Phaser.GameObjects.Sprite {
                 })
                 this.scene.pickupWater.setVisible(1);
                 this.scene.playAudio("gulp");
+
+                this.scene.time.delayedCall(10000,()=>{
+                  this.scene.extraScoreMultiplier = 1;
+                  this.scene.pickupWater.setVisible(0);
+                },null,this);
                 break;
               default:
                 break;
