@@ -234,7 +234,9 @@ export default class GameScene extends Phaser.Scene{
       impact: this.sound.add("impact"),
       pop: this.sound.add("pop"),
       lose: this.sound.add("lose"),
-      win: this.sound.add("win")
+      win: this.sound.add("win"),
+      gulp: this.sound.add("gulp"),
+      munch: this.sound.add("munch")
     };
   }
   playAudio(key) {

@@ -180,7 +180,7 @@ export default class Transition extends Phaser.Scene {
       this.center_width,
       this.height - 220,
       "pixelFont",
-      "-PICKUPS-\n\nGrab pickups to give an advantage.",
+      "-PICKUPS-\n\nGrab pickups for an advantage.",
       12,1
     ).setOrigin(0.5);
     this.add.bitmapText(

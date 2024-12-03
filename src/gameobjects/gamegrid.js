@@ -8,6 +8,7 @@ export default class GameGrid{
     this.grid = new Array(sizes.rows).fill(0).map(() => new Array(sizes.columns).fill(0));
     this.scene = scene;
   }
+
   createGameGrid(levelNumber){
     for(let row = 0; row < sizes.rows; row++){
       for(let col = 0; col < sizes.columns; col++){
@@ -49,6 +50,8 @@ export default class GameGrid{
         }
       }
     }
+    this.cookieSpawned = false;
+    this.waterSpawned = false;
   }
   
   //method that adds a row of random pingas
@@ -71,8 +74,18 @@ export default class GameGrid{
       let chance = Phaser.Math.Between(0,21);
       if (chance == 10 && levelNumber > 2) // SuperPinga
         this.grid[0][i] = randNo+10;
-      else if (chance == 5 && levelNumber > 0) // Pickup
-        this.grid[0][i] = Phaser.Math.Between(1,2) + 20;
+      else if (chance == 5 && levelNumber > 0){ // Pickup
+        let pickupType = Phaser.Math.Between(1,2) + 20;
+        
+        if(pickupType==21 && !this.cookieSpawned){
+          this.grid[0][i] = pickupType;
+          this.cookieSpawned = true;
+        }
+        else if(pickupType==22 && !this.waterSpawned){
+          this.grid[0][i] = pickupType;
+          this.waterSpawned = true;
+        }
+      }
       else
         this.grid[0][i] = randNo;
     }

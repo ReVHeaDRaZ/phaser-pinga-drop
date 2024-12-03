@@ -287,6 +287,7 @@ class Player extends Phaser.GameObjects.Sprite {
                   duration: 400
                 })
                 this.scene.pickupCookie.setVisible(1);
+                this.scene.playAudio("munch");
                 break;
 
               case 22:
@@ -301,6 +302,7 @@ class Player extends Phaser.GameObjects.Sprite {
                   duration: 400
                 })
                 this.scene.pickupWater.setVisible(1);
+                this.scene.playAudio("gulp");
                 break;
               default:
                 break;
