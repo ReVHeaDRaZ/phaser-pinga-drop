@@ -30,7 +30,7 @@ export default class Bootloader extends Phaser.Scene {
     );
 
     // Load in music (Set array to amount of songs used and copy music files to /assets/sounds/music/music0.mp3)
-    Array(4)
+    Array(5)
       .fill(0)
       .forEach((_, i) => {
         this.load.audio(`music${i}`, `assets/sounds/music/music${i}.mp3`);

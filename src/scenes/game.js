@@ -240,7 +240,7 @@ export default class GameScene extends Phaser.Scene{
     this.audios[key].play({ volume, rate },true);
   }
   playMusic(theme = "game") {
-    this.theme = this.sound.add("music" + Phaser.Math.Between(0,3));
+    this.theme = this.sound.add("music" + Phaser.Math.Between(0,4));
     this.theme.stop();
     this.theme.play({
     mute: false,
